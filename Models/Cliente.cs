@@ -1,78 +1,51 @@
-﻿// Models/Cliente.cs
+﻿using System.ComponentModel.DataAnnotations;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace MinhaAPI.Models
+namespace ApiClientes.Models
 {
     public class Cliente
     {
+        // Identificação
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "O nome é obrigatório")]
-        [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres")]
+        [Required(ErrorMessage = "O nome do cliente é obrigatório.")]
+        [StringLength(100, ErrorMessage = "O nome deve conter no máximo 100 caracteres.")]
         public string Nome { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O sobrenome é obrigatório")]
-        [StringLength(100, ErrorMessage = "O sobrenome deve ter no máximo 100 caracteres")]
-        public string SobreNome { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O email é obrigatório")]
-        [EmailAddress(ErrorMessage = "O formato do email é inválido")]
-        [StringLength(100, ErrorMessage = "O email deve ter no máximo 100 caracteres")]
-        public string Email { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "O CPF é obrigatório")]
-        [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve ter exatamente 11 caracteres")]
+        [Required(ErrorMessage = "O CPF do cliente é obrigatório.")]
+        [StringLength(14, MinimumLength = 11, ErrorMessage = "O CPF deve conter entre 11 e 14 caracteres.")]
         public string Cpf { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O telefone é obrigatório")]
-        [StringLength(15, MinimumLength = 10, ErrorMessage = "O telefone deve ter entre 10 e 15 caracteres")]
+
+        [StringLength(15, MinimumLength = 7)]
+        public string? RG { get; set; }
+
+
+        // Contato
+        [Required(ErrorMessage = "O email do cliente é obrigatório.")]
+        [EmailAddress(ErrorMessage = "O formato do email é inválido.")]
+        [StringLength(100, ErrorMessage = "O email deve conter no máximo 100 caracteres.")]
+        public string Email { get; set; } = string.Empty;
+
+
+        [Required(ErrorMessage = "O telefone do cliente é obrigatório.")]
+        [Phone(ErrorMessage = "O formato do telefone é inválido.")]
+        [StringLength(15, MinimumLength = 10, ErrorMessage = "O telefone deve conter entre 10 e 15 caracteres.")]
         public string Telefone { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "A data de nascimento é obrigatória")]
+        
+        // Dados Pessoais
+        [Required(ErrorMessage = "A data de nascimento do cliente é obrigatória.")]
+        [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
 
+
+        // Relacionamento (Endereços)
+        public virtual ICollection<Endereco> Enderecos { get; set; } = new List<Endereco>();
+
+        // Dados de Controle do Sistema
         public DateTime DataCadastro { get; set; } = DateTime.UtcNow;
-
+        public DateTime? DataUltimaAtualizacao { get; set; }
         public bool Ativo { get; set; } = true;
-
-        public List<Endereco> Enderecos { get; set; } = new List<Endereco>();
     }
 }
-
-//using System.ComponentModel.DataAnnotations;
-
-//namespace MinhaAPI.Models
-//{
-//    public class Cliente
-//    {
-//        public int Id { get; set; }
-
-//        [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres")]
-//        [Required(ErrorMessage = "O nome é obrigatório")]
-//        public string Nome { get; set; } = string.Empty;
-
-//        [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres")]
-//        [Required(ErrorMessage = "O nome é obrigatório")]
-//        public string SobreNome { get; set; } = string.Empty;
-
-
-//        [StringLength(100, ErrorMessage = "O email deve ter no máximo 100 caracteres")]
-//        [Required(ErrorMessage = "O email é obrigatório")]
-//        public string Email { get; set; } = string.Empty;
-
-//        [StringLength(14, MinimumLength = 11, ErrorMessage = "O email deve ter no máximo 100 caracteres")]
-//        [Required(ErrorMessage = "O CPF é obrigatório")]
-//        public string Cpf { get; set; } = string.Empty;
-
-//        [StringLength(14, MinimumLength = 11, ErrorMessage = "O email deve ter no máximo 100 caracteres")]
-//        [Required(ErrorMessage = "O telefone é obrigatório")]
-//        public string Telefone { get; set; } = string.Empty;
-
-//        public List<Endereco> Enderecos { get; set; } = new List<Endereco>();
-
-
-//    }
-//}

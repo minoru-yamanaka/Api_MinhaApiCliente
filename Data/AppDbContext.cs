@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MinhaAPI.Models;
+﻿using ApiClientes.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace MinhaAPI.Data
+namespace ApiClientes.Data
 {
-    public class AppDbContext : DbContext
-    {
+    public class AppDbContext : DbContext{
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Endereco> Endereco { get; set; }
-        public DbSet<Cliente> Clientes { get; set; }
-        
+        public DbSet<Cliente> Clientes{ get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
     }
 }

@@ -1,40 +1,41 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ApiClientes.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace MinhaAPI.Models
+public class Endereco
 {
-    public class Endereco
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required(ErrorMessage = "O Logradouro é obrigatório")]
-        public string Logradouro { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string Logradouro { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O Bairro é obrigatório")]
-        public string Bairro { get; set; }
+    [Required]
+    [StringLength(10)]
+    public string Numero { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O Cidade é obrigatório")]
-        public string Cidade { get; set; }
+    [StringLength(50)]
+    public string? Complemento { get; set; }
 
-        [Required(ErrorMessage = "O Estado é obrigatório")]
-        public string Estado { get; set; }
+    [Required]
+    [StringLength(50)]
+    public string Bairro { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O CEP é obrigatório")]
-        [StringLength(9, MinimumLength = 8, ErrorMessage = "O CEP deve ter 9 caracteres (XXXXX-XXX)")]
-        public string CEP { get; set; }
+    [Required]
+    [StringLength(50)]
+    public string Cidade { get; set; } = string.Empty;
 
+    [Required]
+    [StringLength(2, MinimumLength = 2)]
+    public string Estado { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O Numero é obrigatório")]
-        public string Numero { get; set; }
+    [Required]
+    [StringLength(9, MinimumLength = 8)] 
+    public string CEP { get; set; } = string.Empty;
 
-        public string? TipoEndereco { get; set; }
+    // Chave estrangeira para o Cliente
+    public int ClienteId { get; set; }
 
-        public string? Complemento { get; set; }
-        
-        public int ClienteId { get; set; } // Chave estrangeira para Cliente
-
-        [JsonIgnore]
-        public Cliente? Cliente { get; set; } // Navegação para Cliente
-        
-    }
+    [JsonIgnore]
+    public Cliente? Cliente { get; set; }
 }

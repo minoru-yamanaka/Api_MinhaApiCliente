@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\apiclientes.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:apiclientes.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|c:\\xampp\\htdocs\\minoru\\apiclientes-master-02\\apiclientes-master\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E535F082-B6E9-4FB6-ADC7-8AB6139DE981}|ApiClientes.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAMgAAAAAAAAAAAAAAOgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-08-27T23:20:10.658Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAArwBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T23:06:36.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ClienteController.cs",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Controllers\\ClienteController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ClienteController.cs",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Controllers\\ClienteController.cs",
+              "RelativeToolTip": "Controllers\\ClienteController.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAuwKwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T23:14:13.903Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-27T23:12:10.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApiClientes.http",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\ApiClientes.http",
+              "RelativeDocumentMoniker": "ApiClientes.http",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\ApiClientes.http",
+              "RelativeToolTip": "ApiClientes.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-08-27T23:05:01.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
+              "ToolTip": "C:\\xampp\\htdocs\\minoru\\ApiClientes-master-02\\ApiClientes-master\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T23:04:47.044Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

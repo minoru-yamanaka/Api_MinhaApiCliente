@@ -1,108 +1,107 @@
-﻿// Controllers/ClienteController.cs
+﻿// Importa os namespaces necessários para o funcionamento do controller.
+using ApiClientes.Data; // Contém o DbContext para interação com o banco de dados.
+using ApiClientes.Models; // Contém as classes de modelo, como 'Cliente'.
+using ApiClientes.Services; // Contém serviços de lógica de negócio, como 'ClienteService'.
+using Microsoft.AspNetCore.Mvc; // Fornece classes para criar APIs web, como [ApiController] e ControllerBase.
+using Microsoft.EntityFrameworkCore; // Fornece funcionalidades do Entity Framework Core, como ToListAsync e Include.
+using System.Linq; // Adicionado para usar .Any()
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MinhaAPI.Data;
-using MinhaAPI.Models;
-using MinhaAPI.Services; // Importar o namespace do serviço
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MinhaAPI.Controllers
+namespace ApiClientes.Controllers
 {
+    /// <summary>
+    /// Define o endpoint base para este controller como "api/Cliente".
+    /// Ex: https://localhost:7020/api/Cliente
+    /// </summary>
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] // Indica que esta classe é um controller de API, habilitando comportamentos específicos.
     public class ClienteController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly ICpfValidationService _cpfValidationService;
+        // Campo privado para armazenar a instância do DbContext, usado para consultar o banco de dados.
+        private readonly AppDbContext _contextFromDb;
 
-        public ClienteController(AppDbContext appContext, ICpfValidationService cpfValidationService)
+        // Campo privado para armazenar a instância do serviço de cliente, usado para lógicas de negócio.
+        private readonly ClienteService _clienteService;
+
+        /// <summary>
+        /// Construtor do controller, responsável por receber as dependências via injeção de dependência.
+        /// </summary>
+        public ClienteController(AppDbContext contextFromDb, ClienteService clienteService)
         {
-            _appDbContext = appContext;
-            _cpfValidationService = cpfValidationService;
+            _contextFromDb = contextFromDb;
+            _clienteService = clienteService;
         }
 
-        // POST: api/Cliente -> CreateCliente
-        [HttpPost]
-        public async Task<IActionResult> CreateCliente([FromBody] Cliente cliente)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Validação 1: Verificar se CPF ou Email já existem
-            var clienteExistente = await _appDbContext.Clientes
-                .AnyAsync(c => c.Cpf == cliente.Cpf || c.Email == cliente.Email);
-
-            if (clienteExistente)
-            {
-                return Conflict("Já existe um cliente com este CPF ou Email.");
-            }
-
-            // Validação 2: Integrar com a API externa para validar o CPF
-            var isCpfValid = await _cpfValidationService.IsCpfValidAsync(cliente.Cpf);
-            if (!isCpfValid)
-            {
-                return BadRequest("O CPF informado é inválido.");
-            }
-
-            // Define valores padrão do servidor
-            cliente.DataCadastro = DateTime.UtcNow;
-            cliente.Ativo = true;
-
-            await _appDbContext.Clientes.AddAsync(cliente);
-            await _appDbContext.SaveChangesAsync();
-
-            // Retorna 201 Created com a rota para o novo recurso
-            return CreatedAtAction(nameof(GetClienteById), new { id = cliente.Id }, cliente);
-        }
-
-        // GET: api/Cliente/{id} -> GetClienteById
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetClienteById(int id)
-        {
-            var cliente = await _appDbContext.Clientes
-                .Include(c => c.Enderecos)
-                .AsNoTracking() // Melhora a performance para consultas
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (cliente == null)
-            {
-                return NotFound("Cliente não encontrado.");
-            }
-
-            return Ok(cliente);
-        }
-
-        // GET: api/Cliente -> GetAllClientes
+        /// <summary>
+        /// Endpoint para obter todos os clientes (GET /api/Cliente).
+        /// Retorna uma lista simplificada de clientes.
+        /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAllClientes()
+        public async Task<IActionResult> GetAll()
         {
-            var clientes = await _appDbContext.Clientes
-                .Where(c => c.Ativo)
-                .Select(c => new
+            var clientes = await _contextFromDb.Clientes
+                .Select(cliente => new
                 {
-                    c.Id,
-                    c.Nome,
-                    c.Email,
-                    c.Telefone,
-                    c.DataNascimento
+                    cliente.Id,
+                    cliente.Nome,
+                    cliente.Email,
+                    cliente.Telefone,
+                    cliente.DataNascimento
                 })
-                .AsNoTracking()
                 .ToListAsync();
 
             return Ok(clientes);
         }
 
-        // PUT: api/Cliente/{id} -> UpdateCliente
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCliente(int id, [FromBody] Cliente clienteAtualizado)
+        /// <summary>
+        /// Endpoint para obter um cliente específico pelo seu ID (GET /api/Cliente/{id}).
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            if (id != clienteAtualizado.Id)
+            Cliente? cliente = await _contextFromDb.Clientes
+                .Include(cliente => cliente.Enderecos)
+                .FirstOrDefaultAsync(cliente => cliente.Id == id);
+
+            if (cliente == null)
             {
-                return BadRequest("O ID da rota deve ser o mesmo do corpo da requisição.");
+                return NotFound($"Cliente com o id {id} não foi encontrado");
+            }
+
+            return Ok(cliente);
+        }
+
+        /// <summary>
+        /// Endpoint para criar um novo cliente (POST /api/Cliente).
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Cliente cliente)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _clienteService.ValidarCpfAsync(cliente.Cpf))
+            {
+                // Retornar BadRequest é geralmente melhor que lançar uma exceção para erros de validação.
+                return BadRequest("CPF inválido ou já cadastrado.");
+            }
+
+            _contextFromDb.Clientes.Add(cliente);
+            await _contextFromDb.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetById), new { id = cliente.Id }, cliente);
+        }
+
+        /// <summary>
+        /// Endpoint para atualizar um cliente existente (PUT /api/Cliente/{id}).
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Cliente cliente)
+        {
+            if (id != cliente.Id)
+            {
+                return BadRequest("O ID do cliente na URL não corresponde ao ID no corpo da solicitação.");
             }
 
             if (!ModelState.IsValid)
@@ -110,131 +109,64 @@ namespace MinhaAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var clienteExistente = await _appDbContext.Clientes.FindAsync(id);
+            // --- AJUSTE IMPORTANTE AQUI ---
+            // Busca o cliente existente no banco, incluindo seus endereços atuais para podermos gerenciá-los.
+            var existingCliente = await _contextFromDb.Clientes
+                .Include(c => c.Enderecos)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (clienteExistente == null)
+            if (existingCliente == null)
             {
-                return NotFound("Cliente não encontrado.");
+                return NotFound($"Cliente com o id {id} não foi encontrado");
             }
 
-            // Previne que o cliente seja reativado ou desativado indevidamente por esta rota
-            if (!clienteExistente.Ativo)
+            // Copia os valores das propriedades simples (Nome, Cpf, Email, etc.) do objeto recebido para o objeto do banco.
+            // Isso evita a necessidade de atribuir cada propriedade manualmente.
+            _contextFromDb.Entry(existingCliente).CurrentValues.SetValues(cliente);
+
+            // Gerenciamento correto da coleção de Endereços:
+            // 1. Remove todos os endereços antigos que estavam associados a este cliente.
+            _contextFromDb.Enderecos.RemoveRange(existingCliente.Enderecos);
+
+            // 2. Adiciona os novos endereços que vieram na requisição.
+            if (cliente.Enderecos != null && cliente.Enderecos.Any())
             {
-                return BadRequest("Não é possível atualizar um cliente inativo.");
+                // Para cada novo endereço, garantimos que ele será inserido como um novo registro.
+                foreach (var endereco in cliente.Enderecos)
+                {
+                    endereco.Id = 0; // Zera o ID para o EF entender que é um novo endereço.
+                    endereco.ClienteId = existingCliente.Id; // Garante a associação correta.
+                }
+                // Adiciona a nova lista de endereços ao contexto.
+                await _contextFromDb.Enderecos.AddRangeAsync(cliente.Enderecos);
             }
 
-            // Atualiza as propriedades do objeto que o EF está rastreando
-            _appDbContext.Entry(clienteExistente).CurrentValues.SetValues(clienteAtualizado);
+            // Define a data de atualização para o momento atual.
+            existingCliente.DataUltimaAtualizacao = DateTime.UtcNow;
 
-            try
-            {
-                await _appDbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Adicionar tratamento para concorrência se necessário
-                throw;
-            }
+            // Salva todas as alterações (dados do cliente, remoção e adição de endereços) no banco.
+            await _contextFromDb.SaveChangesAsync();
 
-            return NoContent(); // Retorno padrão para PUT bem-sucedido (204)
+            return Ok(existingCliente);
         }
 
-        // DELETE: api/Cliente/{id} -> DeleteCliente
+        /// <summary>
+        /// Endpoint para deletar um cliente (DELETE /api/Cliente/{id}).
+        /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var cliente = await _appDbContext.Clientes.FindAsync(id);
+            Cliente? cliente = await _contextFromDb.Clientes.FindAsync(id);
 
             if (cliente == null)
             {
-                return NotFound("Cliente não encontrado.");
+                return NotFound($"Cliente com o id {id} não foi encontrado");
             }
 
-            // --- Implementação de Soft Delete (Recomendado) ---
-            cliente.Ativo = false;
-            await _appDbContext.SaveChangesAsync();
+            _contextFromDb.Clientes.Remove(cliente);
+            await _contextFromDb.SaveChangesAsync();
 
-            /*
-            // --- Implementação de Hard Delete (Deleta permanentemente) ---
-            // _appDbContext.Clientes.Remove(cliente);
-            // await _appDbContext.SaveChangesAsync();
-            */
-
-            return NoContent(); // Retorno padrão para DELETE bem-sucedido (204)
+            return Ok("Cliente deletado com sucesso!");
         }
     }
 }
-
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-//using MinhaAPI.Data;
-//using MinhaAPI.Models;
-
-//namespace MinhaAPI.Controllers
-//{
-//        [Route("api/[controller]")]
-//        [ApiController]
-//        public class ClienteController : ControllerBase 
-//        {
-//            private readonly AppDbContext _appDbContext;
-
-//            public ClienteController(AppDbContext appContext) {
-
-//                _appDbContext = appContext;
-
-//            }
-
-//        [HttpGet]
-//        public async Task<IActionResult> GetAll() {
-
-//            var clientes = await _appDbContext.Clientes
-//                .Include(cliente => cliente.Enderecos)
-//                .Select(cliente => new {
-
-//                    Id = cliente.Id,
-//                    Nome = cliente.Nome,
-//                    Email = cliente.Email,
-//                    Enderecos = cliente.Enderecos.Select(endereco => new {
-//                        Id = endereco.Id,
-//                        Logradouro = endereco.Logradouro,
-//                        Bairro = endereco.Bairro,
-//                        Cidade = endereco.Cidade
-
-//                    }).ToList()
-
-//                }).ToListAsync();
-//            return Ok(clientes);
-
-
-//        }
-
-//        [HttpGet("{id}")]
-//        public async Task<IActionResult> GetById([FromRoute]int id)
-//        {
-
-//            var clientes = await _appDbContext.Clientes
-//                .Include(cliente => cliente.Enderecos)
-//                .FirstOrDefaultAsync(cliente => cliente.Id == id);
-//            return Ok(clientes);
-
-//        }
-
-//        [HttpPost]
-//        public async Task<ActionResult> Create([FromBody] Cliente cliente) 
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return BadRequest(ModelState);
-//            }
-
-//            _appDbContext.Clientes.Add(cliente);
-//            await _appDbContext.SaveChangesAsync();
-//            return Ok("Cliente criado com sucesso!");
-
-//        }
-
-//    }
-//}
-
-////Add-Migration RelacionamentoEntidades
-
