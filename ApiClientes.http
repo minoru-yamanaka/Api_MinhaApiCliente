@@ -1,7 +1,11 @@
 @ApiClientes_HostAddress = http://localhost:7020
-// 5222
-//7020 
-GET {{ApiClientes_HostAddress}}/weatherforecast/
-Accept: application/json
+// Cria uma variável chamada "ApiClientes_HostAddress"
+// Aqui ela aponta para a URL base da API que está rodando localmente na porta 7020
 
-###
+GET {{ApiClientes_HostAddress}}/weatherforecast/
+// Faz uma requisição GET para o endpoint "weatherforecast" da API
+// Repara que usa a variável definida acima: {{ApiClientes_HostAddress}}
+// Então a URL completa fica: http://localhost:7020/weatherforecast/
+
+Accept: application/json
+// Cabeçalho HTTP que indica que a resposta esperada deve vir em formato JSON
